@@ -6,6 +6,8 @@ gem 'json', '2.0.4'
 
 gem 'minitest', '5.5'
 
+gem 'test-unit'
+
 gem 'multicast'
 
 gem 'rack'
