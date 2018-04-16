@@ -53,7 +53,7 @@ If asked root permissions, enter your root password.
 
 ### **6. To start the application, run:**
 
-`rackup --host 0.0.0.0`
+`rackup --host 0.0.0.0 --port 9292`
 
 
 
