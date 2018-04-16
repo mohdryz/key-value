@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     choice (0.2.0)
-    json (2.1.0)
+    json (2.0.4)
     multicast (0.2.2)
       choice (>= 0.1.4)
     rack (1.6.9)
@@ -20,7 +20,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  json (~> 2.1.0)
+  json (= 2.0.4)
   multicast
   rack
   rack-test (= 0.7)
