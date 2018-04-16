@@ -61,39 +61,38 @@ If asked root permissions, enter your root password.
 
 ## Endpoints
 
-- > GET `/`
+- GET `/`
 
 ```
 "Distributed Key-Value Store"
 ```
 
-- > GET `/get/key`
+- GET `/get/key`
 
 ```
 value
 ```
 
-- > POST `/add`
-```
-request:
-{
-	'key' : 'value'
-}
+- POST `/add`
 
-response:
+>{
+>	'key' : 'value'
+>}
+
+```
 "Success"
 ```
 
-- > POST `/set/key`
-```
-request:
-"value"
+- POST `/set/key`
 
-response:
+>"value"
+
+```
 "Success"
 ```
 
-- > POST `/remove/key`
+- POST `/remove/key`
+
 ```
 "Success"
 ```
