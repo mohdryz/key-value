@@ -1,13 +1,13 @@
 # Distributed Key-Value Pair
 ###### Written in ruby
 
-#### **Steps to run the application:**
+## **Steps to run the application:**
 
 Make sure you have the GCC compiler on your machine before hand. After setting up git, etc., do the following.
 
 
 
-**1. Install ruby.**
+### **1. Install ruby.**
 
 For CentOS, Fedora, RHEL, use yum package installer:
 
@@ -25,7 +25,7 @@ For others, please follow [this link](https://www.ruby-lang.org/en/documentation
 
 
 
-**2. Run the following command to install bundler:**
+### **2. Run the following command to install bundler:**
 
 `gem install bundler`
 
@@ -33,11 +33,11 @@ If asked root permissions, enter your root password.
 
 
 
-**3. Clone the application in your workspace.**
+### **3. Clone the application in your workspace.**
 
 
 
-**4. Run the following command to install dependencies from the home directory of the application:**
+### **4. Run the following command to install dependencies from the home directory of the application:**
 
 `bundle install`
 
@@ -45,13 +45,13 @@ If asked root permissions, enter your root password.
 
 
 
-**5. For running the unit tests, run:**
+### **5. For running the unit tests, run:**
 
 `ruby test_app.rb`
 
 
 
-**6. To start the application, run:**
+### **6. To start the application, run:**
 
 `rackup --host 0.0.0.0`
 
