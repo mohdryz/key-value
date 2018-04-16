@@ -8,4 +8,4 @@ gem 'multicast'
 
 gem 'rack'
 
-gem 'rack-test'
+gem 'rack-test', '0.8.3'
