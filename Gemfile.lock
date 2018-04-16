@@ -3,7 +3,7 @@ GEM
   specs:
     choice (0.2.0)
     json (2.0.4)
-    minitest (5.8.4)
+    minitest (5.5.0)
     multicast (0.2.2)
       choice (>= 0.1.4)
     rack (1.6.9)
@@ -22,7 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   json (= 2.0.4)
-  minitest (= 5.8.4)
+  minitest (= 5.5)
   multicast
   rack
   rack-test (= 0.7)
