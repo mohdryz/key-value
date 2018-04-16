@@ -57,5 +57,44 @@ If asked root permissions, enter your root password.
 
 
 
-Make sure that the firewall is set to trusted so that two instances on two different nodes can interact.
+#### **Make sure that the firewall is set to trusted so that two instances on two different nodes can interact.**
+
+## Endpoints
+
+- > GET `/`
+
+```
+"Distributed Key-Value Store"
+```
+
+- > GET `/get/key`
+
+```
+value
+```
+
+- > POST `/add`
+```
+request:
+{
+	'key' : 'value'
+}
+
+response:
+"Success"
+```
+
+- > POST `/set/key`
+```
+request:
+"value"
+
+response:
+"Success"
+```
+
+- > POST `/remove/key`
+```
+"Success"
+```
 
