@@ -22,7 +22,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  json
+  json (~> 2.1.0)
   multicast
   rack
   rack-test
