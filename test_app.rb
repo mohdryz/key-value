@@ -3,11 +3,11 @@ Dir['./src/*.rb'].each {|file| require file }
 require 'sinatra'
 require_relative "./app.rb"
 require 'json'
-require "test/unit"
+require 'minitest/autorun'
 require 'rack/test'
 require 'securerandom'
  
-class TestApplication < Test::Unit::TestCase
+class TestApplication < Minitest::Test
   include Rack::Test::Methods
 
   def app
