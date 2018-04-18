@@ -81,8 +81,6 @@ $clsuter_message_thrd = Thread.new do
   $clusterlistener.listen do |pl|
     node_details = JSON.parse(pl.message)
     host_ip, host_port = pl.ip, pl.port
-    puts node_details
-    puts "#{host_ip}:#{host_port}"
     Communicate.handle_node_info(node_details, host_ip, host_port)
   end
 end

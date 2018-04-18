@@ -16,7 +16,6 @@ class Communicate
               msg, info = sock.recvfrom(1024)
               query, values = msg.split("::")
               if query=="FOUNDVAL"
-                puts "Socket Closed"
                 pl = JSON.parse(values)
                 if pl[key]
                   sock.close
