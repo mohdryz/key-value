@@ -9,11 +9,6 @@ class Application < Sinatra::Base
     $GlobalHash.to_json
   end
 
-  get '/replica-values' do
-    content_type :json
-    $GlobalReplicas.to_json
-  end
-
   get '/get/:key' do
     resp = $GlobalHash[params[:key]]
     resp = Communicate.fetch_from_replica(params[:key]) if resp.nil?

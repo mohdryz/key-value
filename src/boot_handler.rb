@@ -88,8 +88,9 @@ end
 $replica_handle_thrd = Thread.new do
   $replicalistener.listen do |pl|
     entity = JSON.parse(pl.message)
-    next if (entity["node_name"]!=$broadcast_name && entity["node_name"]!=$name)
-    Communicate.handle_replica(entity)
+    if (entity["node_name"]==$broadcast_name || entity["node_name"]!=$name)
+      Communicate.handle_replica(entity)
+    end
   end
 end
 
