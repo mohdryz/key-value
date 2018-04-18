@@ -63,9 +63,10 @@ class Communicate
     return if key.nil?
     msg = {
       "node_name" => $broadcast_name,
-      "host" => $name
+      "host" => $name,
+      "key" => key
     }
-    msg[key] = (method=="add") ? value : nil
+    msg["value"] = (method=="add") ? value : nil
     $replicasender.send(msg.to_json)
   end
 
