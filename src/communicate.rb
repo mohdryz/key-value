@@ -42,6 +42,7 @@ class Communicate
   end
 
   def self.update_replicas(key_hash, key, value, method)
+    key_hash = key_hash || {}
     key_hash.each do |k, v|
       msg = {
         "node_name" => $broadcast_name,
