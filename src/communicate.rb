@@ -34,6 +34,14 @@ class Communicate
     end
   end
 
+  def self.fetch_from_replica(key)
+    $GlobalReplicas.each do |node, hash|
+      val = hash[key]
+      return val if val
+    end
+    return nil
+  end
+
   def self.handle_node_info(node_info, host_ip, host_port)
     return if (node_info["cluster"]!=$cluster_name)
     $GlobalHash.each do |key, val|

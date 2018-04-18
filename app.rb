@@ -1,7 +1,7 @@
 class Application < Sinatra::Base
 
   get '/' do
-    "Distributed Key-Value Store"
+    "Distributed Key-Value Store\n\rServer: #{$name}"
   end
 
   get '/values' do
@@ -9,11 +9,15 @@ class Application < Sinatra::Base
     $GlobalHash.to_json
   end
 
+  get '/replica-values' do
+    content_type :json
+    $GlobalReplicas.to_json
+  end
+
   get '/get/:key' do
     resp = $GlobalHash[params[:key]]
-    if resp.nil?
-      resp = Communicate.fetch_from_other_servers(params[:key])
-    end
+    resp = Communicate.fetch_from_replica(params[:key]) if resp.nil?
+    resp = Communicate.fetch_from_other_servers(params[:key]) if resp.nil?
     resp = resp.nil? ? "No Value Found Against Key: #{params[:key]}" : resp.to_s
     resp
   end
