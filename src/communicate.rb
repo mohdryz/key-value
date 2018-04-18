@@ -66,8 +66,6 @@ class Communicate
       "key" => key
     }
     msg["value"] = (method=="add") ? value : nil
-    puts "single add: "
-    puts msg
     $replicasender.send(msg.to_json)
   end
 
@@ -78,8 +76,6 @@ class Communicate
       "key" => key,
       "host" => $name
     }
-    puts "send to new node: " 
-    puts msg
     $replicasender.send(msg.to_json)
   end
 
