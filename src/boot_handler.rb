@@ -79,16 +79,18 @@ end
 
 $clsuter_message_thrd = Thread.new do
   $clusterlistener.listen do |pl|
-    node_deatails = JSON.parse(pl.message)
+    node_details = JSON.parse(pl.message)
     host_ip, host_port = pl.ip, pl.port
-    Communicate.handle_node_info(node_deatails, host_ip, host_port)
+    puts node_details
+    puts "#{host_ip}:#{host_port}"
+    Communicate.handle_node_info(node_details, host_ip, host_port)
   end
 end
 
 $replica_handle_thrd = Thread.new do
   $replicalistener.listen do |pl|
     entity = JSON.parse(pl.message)
-    if (entity["node_name"]==$broadcast_name || entity["node_name"]!=$name)
+    if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name)
       Communicate.handle_replica(entity)
     end
   end
