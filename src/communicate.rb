@@ -54,7 +54,8 @@ class Communicate
     key_hash.each do |k, v|
       msg = {
         "node_name" => $broadcast_name,
-        k => v,
+        "value" => v,
+        "key" => k,
         "host" => $name
       }
       $replicasender.send(msg.to_json)
@@ -71,14 +72,15 @@ class Communicate
   def self.sync_replicas_to_new_node(node_name, key, val)
     msg = {
       "node_name" => node_name,
-      key => val,
+      "value" => val,
+      "key" => key,
       "host" => $name
     }
     $replicasender.send(msg.to_json)
   end
 
   def self.handle_replica(msg)
-    node = msg["node_name"]
+    node = msg["host"]
     $GlobalReplicas[node] = {} if $GlobalReplicas[node].nil?
     $GlobalReplicas[node].merge!({msg["key"] => msg["value"]})
   end
