@@ -64,6 +64,26 @@ puts "Booting The Application"
 make_multicast_connections
 inform_cluster_nodes
 
+$clsuter_message_thrd = Thread.new do
+  $clusterlistener.listen do |pl|
+    node_details = JSON.parse(pl.message)
+    host_ip, host_port = pl.ip, pl.port
+    puts node_details
+    puts "#{host_ip}:#{host_port}"
+    Communicate.handle_node_info(node_details, host_ip, host_port)
+  end
+end
+
+$replica_handle_thrd = Thread.new do
+  puts "Replicas are being caught"
+  $replicalistener.listen do |pl|
+    entity = JSON.parse(pl.message)
+    if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name)
+      Communicate.handle_replica(entity)
+    end
+  end
+end
+
 $thr = Thread.new do
   $listener.listen do |pl|
     query, msg = pl.message.split("::")
@@ -76,24 +96,3 @@ $thr = Thread.new do
     end
   end
 end
-
-$clsuter_message_thrd = Thread.new do
-  $clusterlistener.listen do |pl|
-    node_details = JSON.parse(pl.message)
-    host_ip, host_port = pl.ip, pl.port
-    puts node_details
-    puts "#{host_ip}:#{host_port}"
-    Communicate.handle_node_info(node_details, host_ip, host_port)
-  end
-end
-
-$replica_handle_thrd = Thread.new do
-  $replicalistener.listen do |pl|
-    entity = JSON.parse(pl.message)
-    puts entity
-    if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name)
-      Communicate.handle_replica(entity)
-    end
-  end
-end
-
