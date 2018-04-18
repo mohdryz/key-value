@@ -54,7 +54,7 @@ end
 
 def inform_cluster_nodes
   join_cluster_message = {
-    "name" => SecureRandom.hex,
+    "name" => $name,
     "cluster" => $cluster_name
   }
   $clustersender.send(join_cluster_message.to_json)
