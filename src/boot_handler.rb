@@ -68,9 +68,9 @@ $replica_handle_thrd = Thread.new do
   puts "Replicas are being caught"
   $replicalistener.listen do |pl|
     entity = JSON.parse(pl.message)
-    puts "read as replica"
-    puts entity
-    if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name)
+    if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name) && (entity["host"]!=$name)
+      puts "read as replica"
+      puts entity
       Communicate.handle_replica(entity)
     end
   end
@@ -98,3 +98,4 @@ $thr = Thread.new do
     end
   end
 end
+
