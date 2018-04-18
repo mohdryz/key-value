@@ -1,5 +1,7 @@
 require 'digest/md5'
 require 'multicast'
+require 'securerandom'
+require 'json'
 
 # administratively scoped multicast addresses are 239.0.0.0 to 239.255.255.255
 
@@ -26,6 +28,7 @@ require 'multicast'
 # other nodes in the cluster. Here, the communication is asynchronous.
 
 def get_multicast_address
+  raise "RESTRICTED CLUSTER NAME" if $cluster_name=="::BROADCAST::"
   md5 = Digest::MD5.hexdigest($cluster_name)
   a = md5.split(/[a-f]/).map{|x| x.to_i if x!=""}.compact
   first, second, third = (a[0]%235), (a[1]%235), (a[2]%235)
@@ -33,6 +36,7 @@ def get_multicast_address
 end
 
 def make_multicast_connections
+  $name = SecureRandom.hex
   $multicast_address = get_multicast_address
 
   $sender = Multicast::Sender.new(:group => $multicast_address, :port => 4567)
@@ -40,10 +44,25 @@ def make_multicast_connections
 
   $keysender = Multicast::Sender.new(:group => $multicast_address, :port => 4568)
   $keylistener = Multicast::Listener.new(:group => $multicast_address, :port => 4568)
+
+  $clustersender = Multicast::Sender.new(:group => $multicast_address, :port => 4566)
+  $clusterlistener = Multicast::Listener.new(:group => $multicast_address, :port => 4566)
+
+  $replicasender = Multicast::Sender.new(:group => $multicast_address, :port => 4569)
+  $replicalistener = Multicast::Listener.new(:group => $multicast_address, :port => 4569)
+end
+
+def inform_cluster_nodes
+  join_cluster_message = {
+    "name" => SecureRandom.hex,
+    "cluster" => $cluster_name
+  }
+  $clustersender.send(join_cluster_message.to_json)
 end
 
 puts "Booting The Application"
 make_multicast_connections
+inform_cluster_nodes
 
 $thr = Thread.new do
   $listener.listen do |pl|
@@ -57,3 +76,20 @@ $thr = Thread.new do
     end
   end
 end
+
+$clsuter_message_thrd = Thread.new do
+  $clusterlistener.listen do |pl|
+    node_deatails = JSON.parse(pl.message)
+    host_ip, host_port = pl.ip, pl.port
+    Communicate.handle_node_info(node_deatails, host_ip, host_port)
+  end
+end
+
+$replica_handle_thrd = Thread.new do
+  $replicalistener.listen do |pl|
+    entity = JSON.parse(pl.message)
+    next if (entity["node_name"]!=$broadcast_name && entity["node_name"]!=$name)
+    Communicate.handle_replica(entity)
+  end
+end
+

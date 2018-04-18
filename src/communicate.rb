@@ -1,5 +1,7 @@
 class Communicate
   require 'timeout'
+  require 'net/http'
+  require "uri"
 
   def self.fetch_from_other_servers(key)
     $sender.send("GETVAL::#{key}")
@@ -31,22 +33,45 @@ class Communicate
       return nil
     end
   end
+
+  def self.handle_node_info(node_info, host_ip, host_port)
+    return if (node_info["cluster"]!=$cluster_name)
+    $GlobalHash.each do |key, val|
+      sync_replicas_to_new_node(node_info["name"], key, val)
+    end
+  end
+
+  def self.update_replicas(key_hash, key, value, method)
+    key_hash.each do |k, v|
+      msg = {
+        "node_name" => $broadcast_name,
+        k => v,
+        "host" => $name
+      }
+      $replicasender.send(msg.to_json)
+    end
+    return if key.nil?
+    msg = {
+      "node_name" => $broadcast_name,
+      "host" => $name
+    }
+    msg[key] = (method=="add") ? value : nil
+    $replicasender.send(msg.to_json)
+  end
+
+  def self.sync_replicas_to_new_node(node_name, key, val)
+    msg = {
+      "node_name" => node_name,
+      key => val,
+      "host" => $name
+    }
+    $replicasender.send(msg.to_json)
+  end
+
+  def self.handle_replica(msg)
+    node = msg["node_name"]
+    $GlobalReplicas[node] = {} if $GlobalReplicas[node].nil?
+    $GlobalReplicas[node].merge!({msg["key"] => msg["value"]})
+  end
   
 end
-
-
-##.  Communicate.fetch_from_other_servers(key)
-
-
-
-
-
-
-
-
-
-
-
-
-
-

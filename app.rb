@@ -24,6 +24,7 @@ class Application < Sinatra::Base
       params.each{|k,v| params[k] = v.to_s}
       $GlobalHash.merge!(params)
     end
+    Communicate.update_replicas(params, nil, nil, "add")
     "Success"
   end
 
@@ -32,12 +33,18 @@ class Application < Sinatra::Base
     if val.is_a? String
       $GlobalHash[params[:key]] = val
     end
+    Communicate.update_replicas(nil, params[:key], val, "add")
     "Success"
   end
 
   post '/remove/:key' do
     resp = $GlobalHash.delete(params[:key])
-    resp = resp.nil? ? "No Value Found Against Key: #{params[:key]}" : "Success"
+    if resp.nil?
+      resp = "No Value Found Against Key: #{params[:key]}"
+    else
+      Communicate.update_replicas(nil, params[:key], nil, "remove")
+      resp = "Success"
+    end
     resp
   end
 
