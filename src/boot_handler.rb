@@ -67,6 +67,7 @@ inform_cluster_nodes
 $replica_handle_thrd = Thread.new do
   puts "Replicas are being caught"
   $replicalistener.listen do |pl|
+    puts pl
     entity = JSON.parse(pl.message)
     if (entity["node_name"]==$broadcast_name || entity["node_name"]==$name) && (entity["host"]!=$name)
       puts "read as replica"
